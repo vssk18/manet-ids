@@ -1,0 +1,179 @@
+\documentclass[preprint,12pt,authoryear]{elsarticle}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{lineno}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{setspace}
+
+\geometry{left=25mm,right=25mm,top=25mm,bottom=25mm}
+\linespread{1.3}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=cyan,
+    citecolor=blue,
+    pdftitle={DoS Attack Detection in MANETs Using Machine Learning},
+    pdfauthor={V.S.S. Karthik}
+}
+
+\journal{Ad Hoc Networks}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{DoS Attack Detection in Mobile Ad Hoc Networks: A Machine Learning Approach with Leakage-Free Evaluation}
+
+\author[1]{Varanasi Sai Srinivasa Karthik\fnref{fn1}}
+\ead{svaranas3@gitam.in}
+
+\author[1]{Pravallika Ghantasala}
+\ead{pghantas@gitam.in}
+
+\author[1]{Mitta Sreenidhi Reddy}
+\ead{smitta@gitam.in}
+
+\author[1]{Narra Rajeswari}
+\ead{rnarra@gitam.in}
+
+\author[1]{Arshad Ahmad Khan Mohammad\corref{cor1}}
+\ead{amohamma2@gitam.edu}
+
+\cortext[cor1]{Corresponding author}
+\fntext[fn1]{Personal email: varanasikarthik44@gmail.com}
+
+\affiliation[1]{organization={Department of Computer Science and Engineering (Cybersecurity), GITAM School of Technology, GITAM University},
+            addressline={Hyderabad Campus}, 
+            city={Rudraram},
+            state={Telangana},
+            postcode={502329}, 
+            country={India}}
+
+\begin{abstract}
+We simulated AODV-based MANETs in NS-3.38 under three conditions: normal operation, mobility-induced congestion, and UDP flooding attacks. From 4,207 network flow records, we extracted 21 features covering packet statistics, routing behavior, and resource utilization. Four classifiers---Random Forest, XGBoost, SVM, and KNN---were evaluated using stratified 5-fold cross-validation with scaling fitted only on training partitions to prevent data leakage.
+
+XGBoost achieved 94.7\% multiclass accuracy and 96.7\% binary accuracy with ROC-AUC of 0.994. Paired t-tests confirmed XGBoost significantly outperformed all other models. Feature importance analysis identified Queue Length, Buffer Utilization, and Forwarding Consistency as the primary discriminators.
+
+Code, dataset, and trained models: \url{https://github.com/vssk18/manet-ids}
+\end{abstract}
+
+\begin{keyword}
+Mobile ad hoc networks \sep Denial-of-service \sep Intrusion detection \sep XGBoost \sep NS-3 \sep Network security
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+\label{sec:intro}
+
+Mobile ad hoc networks operate without fixed infrastructure. Each node routes packets for others while generating its own traffic. This architecture enables rapid deployment in disaster response, military operations, and vehicular communication scenarios where traditional networking is unavailable or impractical.
+
+The same characteristics that make MANETs useful also make them vulnerable. Without centralized control, there is no authority to authenticate nodes or monitor traffic. The shared wireless medium allows any node within range to intercept or inject packets.
+
+Denial-of-service attacks exploit these vulnerabilities. Attackers can flood the network with packets to consume bandwidth and fill queues. They can advertise false routes to attract and drop traffic. The effects propagate through the network as legitimate traffic competes with attack traffic for limited resources.
+
+\subsection{Machine Learning Approach}
+
+We use supervised machine learning for detection. However, many studies apply feature scaling to the entire dataset before splitting into training and test sets. This allows test set statistics to influence training, producing optimistic accuracy estimates that do not reflect deployment performance.
+
+We prevent leakage by fitting all transformations exclusively on training data within each cross-validation fold.
+
+\subsection{Contributions}
+
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+    \item A simulation-based dataset with 4,207 labeled network flow records
+    \item Evaluation of four classifiers using leakage-free methodology  
+    \item Feature importance analysis identifying discriminative metrics
+    \item Public release of all code, data, and trained models
+\end{enumerate}
+
+\section{Dataset Generation}
+\label{sec:dataset}
+
+We generated the dataset using NS-3 version 3.38. From 30 simulation runs across three traffic scenarios, we extracted 4,207 samples with balanced class distribution: Smooth (34.0\%), Non-Malicious (33.0\%), and Malicious (33.0\%).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/fig_01_class_distribution.pdf}
+    \caption{Class distribution showing balanced representation across three traffic categories.}
+    \label{fig:class_dist}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/fig_02_correlation.pdf}
+    \caption{Correlation matrix of selected features.}
+    \label{fig:correlation}
+\end{figure}
+
+\section{Classification Methodology}
+\label{sec:method}
+
+We evaluated four classifiers: Random Forest, XGBoost, SVM, and KNN using five-fold stratified cross-validation with leakage-free preprocessing.
+
+\section{Experimental Results}
+\label{sec:results}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/fig_07_model_comparison.pdf}
+    \caption{Model comparison showing accuracy with error bars.}
+    \label{fig:comparison}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/fig_03_roc_curves.pdf}
+    \caption{ROC curves for binary classification.}
+    \label{fig:roc}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig_04_confusion_matrix.pdf}
+    \caption{Confusion matrices for XGBoost.}
+    \label{fig:cm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/fig_05_feature_importance.pdf}
+    \caption{Feature importance rankings for XGBoost.}
+    \label{fig:importance}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/fig_06_distributions.pdf}
+    \caption{Feature distributions across traffic classes.}
+    \label{fig:distributions}
+\end{figure}
+
+\section{Conclusion}
+
+XGBoost achieved 94.7\% multiclass accuracy and 96.7\% binary accuracy with ROC-AUC of 0.994. Feature importance analysis identified Queue Length, Buffer Utilization, and Forwarding Consistency as the most discriminative indicators.
+
+Dataset, code, and trained models: \url{https://github.com/vssk18/manet-ids}
+
+\bibliographystyle{elsarticle-harv}
+\begin{thebibliography}{1}
+
+\bibitem{ref1}
+T. Chen, C. Guestrin, XGBoost: A scalable tree boosting system, in: Proc. KDD, 2016, pp. 785--794.
+
+\end{thebibliography}
+
+\end{document}
