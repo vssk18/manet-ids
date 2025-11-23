@@ -101,8 +101,7 @@ This work uses simulated network data rather than real-world traffic captures. T
 
 ```bibtex
 @misc{karthik2025manet,
-  author = {Varanasi, Sai Srinivasa Karthik and Ghantasala, Pravallika and 
-            Reddy, Mitta Sreenidhi and Narra Rajeswari, and Arshad Ahmad Khan Mohammad},
+  author = {Sai Srinivasa Karthik Varanasi, Pravallika Ghantasala, Mitta Sreenidhi Reddy, Narra Rajeswari and Arshad Ahmad Khan Mohammad},
   title = {Detection of Denial-of-Service Attacks in Mobile Ad Hoc Networks 
            Using Machine Learning Classifiers},
   year = {2025},
