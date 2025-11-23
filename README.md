@@ -111,11 +111,12 @@ This work uses simulated network data rather than real-world traffic captures. T
 }
 ```
 
-## Authors
+## Co-Authors
 
 Department of CSE (Cybersecurity), GITAM School of Technology, Hyderabad Campus
 
-Contact: amohamma2@gitam.edu
+Contact: amohamma2@gitam.edu, svaranas3@gitam.in
+
 
 ## License
 
